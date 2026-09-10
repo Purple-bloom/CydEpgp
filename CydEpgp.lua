@@ -358,6 +358,25 @@ function CreateLootRow(slotIndex, itemName, itemTexture, itemLink, displayIndex)
     f:Show();
 end
 
+local scannerTooltip = CreateFrame("GameTooltip", "MyBoPScannerTooltip", nil, "GameTooltipTemplate")
+scannerTooltip:SetOwner(WorldFrame, "ANCHOR_NONE")
+
+local function IsItemLinkBoP(itemLink)
+    if not itemLink then return false end
+
+    scannerTooltip:ClearLines()
+    scannerTooltip:SetHyperlink(itemLink)
+
+    for i = 1, scannerTooltip:NumLines() do
+        local line = _G["MyBoPScannerTooltipTextLeft" .. i]
+        if line and line:GetText() == ITEM_BIND_ON_PICKUP then
+            return true
+        end
+    end
+
+    return false
+end
+
 function CydEpgp_OnLootOpen()
     activeLoot = {};
     local numItems = GetNumLootItems();
@@ -372,13 +391,28 @@ function CydEpgp_OnLootOpen()
                 local texture, name, qty, quality = GetLootSlotInfo(i);
                 if not LootSlotIsCoin(i) then
                     local link = GetLootSlotLink(i);
+                    local isItemBoP = IsItemLinkBoP(link);
 
-
+                    if isItemBoP then
+                        if quality >= 3 then -- quality is rarity
+                            displayCount = displayCount + 1;
+                            CreateLootRow(i, name, texture, link, displayCount);
+                            table.insert(activeLoot, {slot=displayCount, name=name, tex=texture, link=link});
+                        end
+                    else --autoloots BoE items to yourself
+                        for raidMemberIndex = 1, GetNumRaidMembers() do
+                            if (GetMasterLootCandidate(raidMemberIndex) == UnitName("player")) then
+                                GiveMasterLoot(i, raidMemberIndex);
+                            end
+                        end
+                    end
+                    --[[
                     if quality >= 3 then -- quality is rarity
                         displayCount = displayCount + 1;
                         CreateLootRow(i, name, texture, link, displayCount);
                         table.insert(activeLoot, {slot=displayCount, name=name, tex=texture, link=link});
                     end
+                    ]]
                 end
             end
             if displayCount > 0 then
