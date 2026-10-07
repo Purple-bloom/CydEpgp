@@ -2,5 +2,7 @@
 ## Title: CydEpgp
 ## Notes: Tracks MS/OS whispers and shows priority info.
 ## Version: 1.0
+## SavedVariables: CydEpgp, CydEpgpData, CydEpgpPrios
+
 CydEpgp.lua
 CydEpgp.xml
