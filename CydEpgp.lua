@@ -187,6 +187,22 @@ function CydEpgp_ExecuteImport()
     end
 end
 
+function CydEpgp_ResetData(input)
+    CydEpgpData.settings = {}
+    CydEpgpData.players = {}
+    CydEpgpData.characters = {}
+    CydEpgpData.raidRewards = {}
+    CydEpgpData.bidPrios = {}
+    CydEpgpPrios = {}
+    dbSettings = {}
+    dbPlayers = {}
+    dbCharacters = {}
+    dbRaidRewards = {}
+    dbBidPrios = {}
+    importResult = {}
+    DEFAULT_CHAT_FRAME:AddMessage("|cff00ff00[CydEpgp]|r Reset all data. There are no more characters, raidrewards or website settings loaded.")
+end
+
 -- ----------------------------------------------------
 -- HELPER FUNCTIONS
 -- ----------------------------------------------------
@@ -851,6 +867,8 @@ function CydEpgp_AwardRaidReward()
     local awardedCount = 0
     local raidMemberNames = {}
 
+    local seenPlayers = {}
+
     for i = 1, numRaidMembers do
         local unitName = UnitName("raid" .. i)
         if unitName then
@@ -862,6 +880,10 @@ function CydEpgp_AwardRaidReward()
                 DEFAULT_CHAT_FRAME:AddMessage("|cffff0000Character in the raid encountered that does not exist in the EPGP system yet. Please export any stored changes to the website, add the new character/player, and re-import. NO EP WAS GIVEN OUT.|r")
                 return
             end
+            if seenPlayers[charData.playerId] then
+                DEFAULT_CHAT_FRAME:AddMessage("|cffff0000[CydEPGP] A player was found twice in the raid (meaning there are two characters in the raid mapping to the same player). EP will only be awarded ONCE per player. Duplicate character: "..unitName..".|r")
+            end
+            seenPlayers[charData.playerId] = true
         end
     end
 
@@ -1030,9 +1052,3 @@ SlashCmdList.GETRAID = ShowRaidMembers
 
 SLASH_SHOWPRIO1 = "/prio"
 SlashCmdList.SHOWPRIO = ShowPrio
-
-SLASH_ACTIONEXPORT1 = "/actionexport"
-SlashCmdList.ACTIONEXPORT = slashShowActionExport
-
-SLASH_LASTACTIONEXPORT1 = "/lastactionexport"
-SlashCmdList.LASTACTIONEXPORT = slashShowLastActionExport

@@ -2,28 +2,28 @@
     <!-- Template for rows in the bid frame -->
     <Frame name="RowTemplate" virtual="true">
         <Size>
-            <AbsDimension x="230" y="25"/>
+            <AbsDimension x="280" y="25"/>
         </Size>
         <Layers>
             <Layer level="ARTWORK">
-                <FontString name="$parentName" inherits="GameFontNormal">
+                <FontString name="$parentName" inherits="GameFontNormalSmall">
                     <Anchors>
                         <Anchor point="LEFT">
                             <Offset><AbsDimension x="5" y="0"/></Offset>
                         </Anchor>
                     </Anchors>
                 </FontString>
-                <FontString name="$parentBid" inherits="GameFontNormal">
-                    <Anchors>
-                        <Anchor point="LEFT">
-                            <Offset><AbsDimension x="60" y="0"/></Offset>
-                        </Anchor>
-                    </Anchors>
-                </FontString>
-                <FontString name="$parentPrio" inherits="GameFontNormal">
+                <FontString name="$parentBid" inherits="GameFontNormalSmall">
                     <Anchors>
                         <Anchor point="LEFT">
                             <Offset><AbsDimension x="120" y="0"/></Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+                <FontString name="$parentPrio" inherits="GameFontNormalSmall">
+                    <Anchors>
+                        <Anchor point="LEFT">
+                            <Offset><AbsDimension x="170" y="0"/></Offset>
                         </Anchor>
                     </Anchors>
                 </FontString>
@@ -55,7 +55,7 @@
     <!-- Main Frame for receiving whispers -->
     <Frame name="CydEpgpFrame" hidden="true" movable="true" enableMouse="true" frameStrata="DIALOG">
         <Size>
-            <AbsDimension x="250" y="300"/>
+            <AbsDimension x="290" y="330"/>
         </Size>
         <Anchors>
             <Anchor point="CENTER"/>
@@ -410,6 +410,18 @@
                 <Scripts>
                     <OnClick>
                         CydEpgp_PresenceCheck()
+                    </OnClick>
+                </Scripts>
+            </Button>
+
+            <Button name="$parentResetDataButton" inherits="UIPanelButtonTemplate" text="Reset data">
+                <Size x="110" y="22"/>
+                <Anchors>
+                    <Anchor point="BOTTOM" relativeTo="$parentPresenceCheckButton" relativePoint="TOP" x="0" y="4"/>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        CydEpgp_ResetData()
                     </OnClick>
                 </Scripts>
             </Button>
