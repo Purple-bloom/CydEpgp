@@ -890,7 +890,6 @@ function CydEpgp_AwardRaidReward()
     for i = 1, numRaidMembers do
         local unitName = UnitName("raid" .. i)
         if unitName then
-            table.insert(raidMemberNames, unitName)
             local lowerName = string.lower(unitName)
             local charData = dbCharacters[lowerName]
 
